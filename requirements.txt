@@ -1,0 +1,8 @@
+torch~=1.8.2+cu111
+matplotlib~=3.3.1
+pillow~=9.2.0
+numpy~=1.21.6
+wxpython~=4.2.0
+scipy~=1.5.2
+opencv-python~=4.6.0.66
+tqdm~=4.64.1
