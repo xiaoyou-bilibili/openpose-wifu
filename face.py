@@ -68,23 +68,11 @@ def transparent2white(img):
         (img[:, :, 1] == 0) &
         (img[:, :, 2] == 0)
     )
-    # set those pixels to white
     img[black_pixels] = [255, 255, 255]
-    # sp = img.shape  # 获取图片维度
-    # width = sp[0]  # 宽度
-    # height = sp[1]  # 高度
-    # for yh in range(height):
-    #     for xw in range(width):
-    #         color_d = img[xw, yh]  # 遍历图像每一个点，获取到每个点4通道的颜色数据
-    #         if len(color_d) == 3 and color_d[0] == 0 and color_d[1] == 0 and color_d[2] == 0:
-    #             img[xw, yh] = [255,255,255]
-            # if len(color_d) > 3:
-            #     if color_d[3] == 0:  # 最后一个通道为透明度，如果其值为0，即图像是透明
-            #         img[xw, yh] = [255, 255, 255, 255]  # 则将当前点的颜色设置为白色，且图像设置为不透明
-
     return img
 
 
+# 获取姿态信息，下面这些都是可以控制的，我这里为了简单起见只设置了几个关键参数
 def get_pose(eye_left_slider, eye_right_slider, mouth_left_slider, head_x_slider, head_y_slider):
     pose = torch.zeros(1, pose_size, dtype=poser.get_dtype())
     # 0-1
@@ -169,6 +157,7 @@ def get_pose(eye_left_slider, eye_right_slider, mouth_left_slider, head_x_slider
     return pose.to(device)
 
 
+# 根据姿态信息来更新图片，并把更新后的图片给返回
 def update(pose):
     global last_pose
     global last_torch_input_image
@@ -236,6 +225,7 @@ def get_head_x_slider(face):
 
 # 读取所有的脸部信息
 def face_process():
+    # 输出的视频的名字和大小
     fourcc = cv.VideoWriter_fourcc(*'DIVX')
     videoWriter = cv.VideoWriter("res.avi", fourcc, 25, (512, 512))
 
@@ -250,6 +240,7 @@ def face_process():
     # 头上下偏的最大值和最小值
     max_head_x_slider = 0
     min_head_x_slider = 0
+    # 这里需要注意，openpose的所有姿态信息都必须放到all文件夹下
     for name in os.listdir("all"):
         with open("all/{}".format(name)) as f:
             data = json.loads(f.read())
@@ -281,7 +272,7 @@ def face_process():
                     continue
             faces.append([])
 
-    # faces = faces[:500]
+    # 对所有提取出的人脸信息进行遍历
     for i in trange(len(faces)):
         face = faces[i]
         img = transparent2white(default_img)
@@ -303,6 +294,7 @@ def face_process():
             # print("嘴巴,{}".format(mouth_slider))
             # print("头左右,{}".format(head_y_slider))
             # print("头上下,{}".format(head_x_slider))
+            # 获取转换后的人脸信息
             img = update(get_pose(eye_left_slider, eye_right_slider, mouth_slider, head_x_slider, head_y_slider))
             img = transparent2white(img)
             # print(img.shape)
@@ -316,14 +308,9 @@ def face_process():
         videoWriter.write(img)
     videoWriter.release()
 
-    # 图片显示
-
-    # # 浅灰色背景
-    # cv.imshow('img1', img)
-    # cv.waitKey(-1)
-
 
 if __name__ == '__main__':
+    # 动漫人物图片
     path = "./data/images/crypko_02.png"
     # 读取图片，先使用opencv去读取一个默认的图片
     with open(path, "rb") as f:
