@@ -3,9 +3,9 @@
 > 
 > 因为项目主要还是以娱乐为主，所以效果非常差，这后面其实还是有非常多的优化空间的，理论上可以做到非常还原，我懒得优化，感兴趣的可以自行优化算法
 ## 视频文章
-[B站]()<br>
-[YouTube]()<br>
-[掘金]()
+[B站](https://www.bilibili.com/video/BV1wG411J7cg)<br>
+[YouTube](https://youtu.be/KKBBNL_fT3g)<br>
+[掘金](https://juejin.cn/post/7153798545949556767)
 ## 效果展示
 ![](./images/out.gif)
 
